@@ -1,0 +1,27 @@
+#!/bin/sh -l
+
+#SBATCH --mail-user=hongyu@purdue.edu
+#SBATCH --mail-type=END
+#SBATCH --mail-type=FAIL
+#SBATCH --mail-type=REQUEUE
+#SBATCH -A debug
+#SBATCH --time=00:30:00
+#SBATCH --gpus-per-node=1
+#SBATCH --ntasks=1 --cpus-per-task=16
+#SBATCH --mem=64G
+
+unset PYTHONPATH
+
+module purge
+module load cuda/12.1.1.lua
+module load cudnn/cuda-12.1_8.9.lua
+
+unset PYTHONPATH
+
+#  --tasks gpqa,mmlu,gsm8k,squadv2 \
+
+
+/depot/zcelik/data/hongyu/venv/bin/python -m lm_eval --model hf  \
+        --model_args pretrained="facebook/opt-125m" \
+        --tasks squadv2 \
+        --batch_size 1
